@@ -1,0 +1,53 @@
+# CLASS_NAMES: ['car','truck', 'construction_vehicle', 'bus', 'trailer',
+#               'barrier', 'motorcycle', 'bicycle', 'pedestrian', 'traffic_cone'] # Openpcd
+CLASS_NAMES: ['car', 'truck', 'trailer', 'bus', 'construction_vehicle', 'bicycle',
+    'motorcycle', 'pedestrian', 'traffic_cone', 'barrier'] # mmdet3d
+DATA_CONFIG:
+    _BASE_CONFIG_: cfgs/dataset_configs/nuscenes_dataset.yaml
+
+    # POINT_CLOUD_RANGE: [-51.2, -51.2, -5.0, 51.2, 51.2, 3.0]
+    POINT_CLOUD_RANGE: [-50, -50, -5.0, 50, 50, 3.0]
+    DATA_PROCESSOR:
+        -   NAME: mask_points_and_boxes_outside_range
+            REMOVE_OUTSIDE_BOXES: True
+
+        -   NAME: shuffle_points
+            SHUFFLE_ENABLED: {
+                'train': True,
+                'test': True
+            }
+        
+        -   NAME: transform_points_to_voxels
+            VOXEL_SIZE: [0.25, 0.25, 8.0]
+            MAX_POINTS_PER_VOXEL: 64
+            MAX_NUMBER_OF_VOXELS: {
+                'train': 30000,
+                'test': 5000
+            }
+MODEL:
+    NAME: PointPillar
+
+    DENSE_HEAD:
+        NAME: AnchorHeadMulti
+        CLASS_AGNOSTIC: False
+
+        TARGET_ASSIGNER_CONFIG:
+            NAME: AxisAlignedTargetAssigner
+            POS_FRACTION: -1.0
+            SAMPLE_SIZE: 512
+            NORM_BY_NUM_EXAMPLES: False
+            MATCH_HEIGHT: False
+            BOX_CODER: ResidualCoder
+            BOX_CODER_CONFIG: {
+                'code_size': 9,
+                'encode_angle_by_sincos': True
+            }
+
+
+    POST_PROCESSING:
+        NMS_CONFIG:
+            MULTI_CLASSES_NMS: True
+            NMS_TYPE: nms_gpu
+            NMS_THRESH: 0.2
+            NMS_PRE_MAXSIZE: 1000
+            NMS_POST_MAXSIZE: 83

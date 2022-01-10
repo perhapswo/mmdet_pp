@@ -1,0 +1,16 @@
+BoxFeature: 7
+ScoreThreshold: 0.2
+NmsOverlapThreshold: 0.2
+UseOnnx: False 
+
+PfeOnnx: /home/jz/yxb/lidar_point_pillars_ws/src/mmdet_pp/test/data/model/pts_pfe.onnx
+BackboneOnnx: /home/jz/yxb/lidar_point_pillars_ws/src/mmdet_pp/test/data/model/pts_backbone_with_anchors.onnx
+
+PfeTrt: /home/jz/yxb/lidar_point_pillars_ws/src/mmdet_pp/test/data/model/pts_pfe.trt
+BackboneTrt: /home/jz/yxb/lidar_point_pillars_ws/src/mmdet_pp/test/data/model/pts_backbone_with_anchors.trt
+
+ModelConfig: /home/jz/yxb/lidar_point_pillars_ws/src/mmdet_pp/pointpillars/cfgs/hv_pointpillars_secfpn_sbn-all_4x8_2x_nus-3d.yaml
+AnchorFile: /home/jz/yxb/lidar_point_pillars_ws/src/mmdet_pp/pointpillars/cfgs/generate_anchors.txt
+
+InputFile: /home/jz/yxb/lidar_point_pillars_ws/src/mmdet_pp/test/data/testdata/1606813517797756000.bin
+OutputFile: /home/jz/yxb/lidar_point_pillars_ws/src/mmdet_pp/test/data/testdata/boxes.txt
